@@ -16,8 +16,7 @@ const Home = () => {
       <HomeNavbar />
       <div className="ContainerDivs py-4 max-w-[800px]  gap-3 flex flex-col mx-auto" id="notesContainer">
         {
-          notes.map((note) => (
-           
+          notes.map((note) => (  
            <NoteItem  key = {note.id} title={note.title}  description={note.description} date={new Date (note.createdAt).toLocaleString() } />    
           )) }  
     </div>
