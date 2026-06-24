@@ -1,19 +1,30 @@
 import NotesNavbar from "../Components/NotesNavbar";
 import Header from "../Components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 let notes = JSON.parse(localStorage.getItem("notes")) || [];
 const Notes = () => {
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  
+  const navigate = useNavigate();
+  const { id } = useParams();
+    const isEditMode = Boolean(id);
+  let currentNote = notes.find((note) => note.id == id);
+  useEffect(() => {
+    if (currentNote) {
+      setTitle(currentNote.title);
+      setDescription(currentNote.description);
+    }
+  }, [currentNote]);
+
   const handleAddNotes = (event) => {
     event.preventDefault();
-    const Title = document.getElementById("title").value;
-    const Description = document.getElementById("description").value;
+  
     let note = {
-      title: Title,
-      description: Description,
+      title: title,
+      description: description,
       createdAt: Date.now(),
       updatedAt: Date.now(),
       id: crypto.randomUUID(),
@@ -23,7 +34,19 @@ const Notes = () => {
     localStorage.setItem("notes", JSON.stringify(notes));
     window.location.href = "http://localhost:5173/";
   };
- 
+
+  const  updateNote=() => {
+    currentNote.title = title;
+    currentNote.description = description;
+    currentNote.updatedAt = Date.now();
+    localStorage.setItem("notes", JSON.stringify(notes));
+    navigate("/");
+  }
+  const deleteNote = () => {
+  notes = notes.filter((note)=> note.id !== id);
+  localStorage.setItem("notes", JSON.stringify(notes) );
+  navigate("/");
+};
 
   return (
     <>
@@ -55,29 +78,32 @@ const Notes = () => {
               ></textarea>
             </div>
             <div className="flex justify-between">
-              <button
-                type="submit"
-                id="addBtn"
-                className="bg-[#437993] p-3 rounded-[8px] hover:cursor-pointer mt-3 text-white"
-              >
-                Add Notes
-              </button>
-              <button
-                type="button"
-                onClick="updateNote()"
-                id="updateBtn"
-                className="bg-[#437993] p-3 rounded-[8px] hover:cursor-pointer mt-3 text-white hidden"
-              >
-                Update Note
-              </button>
-              <button
-                type="button"
-                id="deleteBtn"
-                onClick="deleteNote()"
-                className="bg-[#437993] p-3 rounded-[8px] hover:cursor-pointer mt-3 text-white hidden"
-              >
-                Remove Note
-              </button>
+              {!isEditMode && (
+                <button
+                  type="submit"
+                  className="bg-[#437993] p-3 rounded-[8px] hover:cursor-pointer mt-3 text-white"
+                >
+                  Add Note
+                </button>
+              )}
+              {isEditMode && (
+                <button
+                  type="button"
+                  onClick={updateNote}
+                  className="bg-[#437993] p-3 rounded-[8px] hover:cursor-pointer mt-3 text-white"
+                >
+                  Update Note
+                </button>
+              )}
+              {isEditMode && (
+                <button
+                  type="button"
+                  onClick={deleteNote}
+                  className="bg-[#437993] p-3 rounded-[8px] hover:cursor-pointer mt-3 text-white "
+                >
+                  Remove Note
+                </button>
+              )}
             </div>
           </form>
         </main>
