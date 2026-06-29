@@ -34,7 +34,7 @@ const Notes = () => {
     setNotes(updatedNotes);
     console.log(notes);
     localStorage.setItem("notes", JSON.stringify(updatedNotes));
-    window.location.href = "http://localhost:5173/";
+    navigate("/");
   };
 
   const updateNote = () => {
