@@ -35,7 +35,7 @@ return 0;
       <div className="ContainerDivs py-4 max-w-200  gap-3 flex flex-col mx-auto" id="notesContainer">
         {
           sortedNotes.map((note) => (  
-           <NoteItem  key = {note.id} id={note.id} title={note.title}  description={note.description} date={new Date (note.updatedAt).toLocaleString() } />    
+           <NoteItem  key = {note.id} id={note.id} title={note.title}  description={note.description} date={new Date (note.updatedAt ?? note.createdAt).toLocaleString() } />    
           )) }  
     </div>
       <Link to="/notes"

@@ -27,7 +27,7 @@ const Notes = () => {
       title: title,
       description: description,
       createdAt: Date.now(),
-      updatedAt: Date.now(),
+      updatedAt: null,
       id: crypto.randomUUID(),
     };
     const updatedNotes = [...notes, note];
@@ -44,7 +44,7 @@ const Notes = () => {
           ...note,
           title: title,
           description: description,
-          updatedAt: Date.now(),
+          updatedAt: Date.now()
         };
       }
       return note;
