@@ -2,11 +2,12 @@ import NotesNavbar from "../Components/NotesNavbar";
 import Header from "../Components/Header";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
+import { useSelector,useDispatch } from "react-redux";
+import { addNote,deleteNote,updateNote } from "../redux/notesSlice";
+import { nanoid } from 'nanoid';
 const Notes = () => {
-  const [notes, setNotes] = useState(
-    JSON.parse(localStorage.getItem("notes")) || [],
-  );
+  const notes = useSelector((state)=>state.note.notes)
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
@@ -28,35 +29,24 @@ const Notes = () => {
       description: description,
       createdAt: Date.now(),
       updatedAt: null,
-      id: crypto.randomUUID(),
+      id: nanoid()
     };
-    const updatedNotes = [...notes, note];
-    setNotes(updatedNotes);
-    console.log(notes);
-    localStorage.setItem("notes", JSON.stringify(updatedNotes));
+    dispatch(addNote(note));
     navigate("/");
   };
 
-  const updateNote = () => {
-    const updatedNotes = notes.map((note) => {
-      if (note.id == id) {
-        return {
-          ...note,
-          title: title,
-          description: description,
-          updatedAt: Date.now()
-        };
-      }
-      return note;
-    });
-    setNotes(updatedNotes);
-    localStorage.setItem("notes", JSON.stringify(updatedNotes));
+  const handleUpdatedNote = () => {
+    const updatedNote = {
+      id: id,
+      title: title,
+      description: description,
+      updatedAt: Date.now()
+    }
+    dispatch(updateNote(updatedNote))
     navigate("/");
   };
-  const deleteNote = () => {
-    const updatedNotes = notes.filter((note) => note.id !== id);
-    setNotes(updatedNotes)
-    localStorage.setItem("notes", JSON.stringify(updatedNotes));
+  const HandleDeleteNote = () => {
+    dispatch(deleteNote(id))
     navigate("/");
   };
 
@@ -101,7 +91,7 @@ const Notes = () => {
               {isEditMode && (
                 <button
                   type="button"
-                  onClick={updateNote}
+                  onClick={handleUpdatedNote}
                   className="bg-[#437993] p-3 rounded-lg hover:cursor-pointer mt-3 text-white"
                 >
                   Update Note
@@ -110,7 +100,7 @@ const Notes = () => {
               {isEditMode && (
                 <button
                   type="button"
-                  onClick={deleteNote}
+                  onClick={HandleDeleteNote}
                   className="bg-[#437993] p-3 rounded-lg hover:cursor-pointer mt-3 text-white "
                 >
                   Remove Note

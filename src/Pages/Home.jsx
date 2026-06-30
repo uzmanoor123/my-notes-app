@@ -3,9 +3,10 @@ import Header from "../Components/Header";
 import { Link } from "react-router-dom";
 import NoteItem from "../Components/NoteItem";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Home = () => {
-  const [notes] = useState(JSON.parse(localStorage.getItem("notes")) || [])
+  const notes = useSelector((state)=>state.note.notes )
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("");
   const filteredNotes = notes.filter((note)=> {
