@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 
 const Home = () => {
-  const notes = useSelector((state)=>state.note.notes )
+  const notes = useSelector((state)=>state.note.notes)
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("");
   const filteredNotes = notes.filter((note)=> {
@@ -21,7 +21,7 @@ const Home = () => {
   return a.title.localeCompare(b.title)
 }
 else if (sortBy == "edited"){
-  return b.updatedAt - a.updatedAt
+  return b.updatedAt - a.updatedAt;
 }
 else if (sortBy == "created"){
   return b.createdAt - a.createdAt

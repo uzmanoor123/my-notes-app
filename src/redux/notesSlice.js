@@ -12,24 +12,25 @@ const notesSlice = createSlice({
       state.notes.push(action.payload);
       localStorage.setItem("notes", JSON.stringify(state.notes));
     },
-    deleteNote:(state,action)=>{
-        state.notes= state.notes.filter(
-        (note)=> note.id !== action.payload);
-        localStorage.setItem("notes", JSON.stringify(state.notes));  
+    deleteNote: (state, action) => {
+      state.notes = state.notes.filter(
+        (note) => note.id !== action.payload);
+      localStorage.setItem("notes", JSON.stringify(state.notes));
     },
-    updateNote: (state,action)=>{
-       const index = state.notes.findIndex(
-        (note) => note.id === action.payload.id
-       );
-       state.notes[index] = action.payload
-       localStorage.setItem("notes", JSON.stringify(state.notes))
+    updateNote: (state, action) => {
+      const index = state.notes.findIndex(
+        (note) => note.id === action.payload.id);
+      state.notes[index] = {
+        ...state.notes[index], ...action.payload
+      }
+      localStorage.setItem("notes", JSON.stringify(state.notes))
     }
   },
 });
 
 export const {
-    addNote,
-    deleteNote,
-    updateNote,
+  addNote,
+  deleteNote,
+  updateNote,
 } = notesSlice.actions;
- export default notesSlice.reducer;
+export default notesSlice.reducer;

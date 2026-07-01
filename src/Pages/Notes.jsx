@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 import { addNote,deleteNote,updateNote } from "../redux/notesSlice";
-import { nanoid } from 'nanoid';
 const Notes = () => {
   const notes = useSelector((state)=>state.note.notes)
   const dispatch = useDispatch();
@@ -29,7 +28,7 @@ const Notes = () => {
       description: description,
       createdAt: Date.now(),
       updatedAt: null,
-      id: nanoid()
+      id: crypto.randomUUID()
     };
     dispatch(addNote(note));
     navigate("/");
@@ -37,9 +36,9 @@ const Notes = () => {
 
   const handleUpdatedNote = () => {
     const updatedNote = {
-      id: id,
       title: title,
       description: description,
+      id: id,
       updatedAt: Date.now()
     }
     dispatch(updateNote(updatedNote))
