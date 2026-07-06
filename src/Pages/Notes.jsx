@@ -2,16 +2,13 @@ import NotesNavbar from "../Components/NotesNavbar";
 import Header from "../Components/Header";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSelector,useDispatch } from "react-redux";
-import { addNote,deleteNote,updateNote } from "../redux/notesSlice";
 const Notes = () => {
-  const notes = useSelector((state)=>state.note.notes)
-  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditMode = Boolean(id);
+  const [notes, setNotes] = useState([]);
   const currentNote = notes.find((note) => note.id == id);
   useEffect(() => {
     if (currentNote) {
@@ -30,7 +27,15 @@ const Notes = () => {
       updatedAt: null,
       id: crypto.randomUUID()
     };
-    dispatch(addNote(note));
+    console.log(note);
+    fetch("http://localhost:3000/api/notes",{
+      method:"POST",
+      headers:{
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify(note)
+      
+    })
     navigate("/");
   };
 
@@ -38,14 +43,24 @@ const Notes = () => {
     const updatedNote = {
       title: title,
       description: description,
-      id: id,
-      updatedAt: Date.now()
     }
-    dispatch(updateNote(updatedNote))
+    fetch(`http://localhost:3000/api/notes/${id}`,{
+      method:"PUT",
+      headers:{
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify(updatedNote)  
+    })  
     navigate("/");
   };
   const HandleDeleteNote = () => {
-    dispatch(deleteNote(id))
+      fetch(`http://localhost:3000/api/notes/${id}`,{
+      method:"DELETE",
+      headers:{
+        "Content-Type": "application/json",
+      },
+      body:JSON.stringify(HandleDeleteNote)  
+    })   
     navigate("/");
   };
 

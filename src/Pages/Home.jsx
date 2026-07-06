@@ -2,13 +2,32 @@ import HomeNavbar from "../Components/HomeNavbar";
 import Header from "../Components/Header";
 import { Link } from "react-router-dom";
 import NoteItem from "../Components/NoteItem";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 const Home = () => {
-  const notes = useSelector((state)=>state.note.notes)
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("");
+  const [notes, setNotes] = useState([]);
+
+  const getNotes = async () => {
+    // get notes
+    const result = await fetch(`http://localhost:3000/api/notes`,{
+      method:"GET",
+      headers:{
+        "Content-Type": "application/json",
+      }
+    }) 
+
+    const response = await result.json()
+    console.log(response)
+    setNotes(response);
+  }
+
+  useEffect(()=>{
+    getNotes();
+  },[])
+
+
   const filteredNotes = notes.filter((note)=> {
     return(
     note.title.toLowerCase().includes((search).toLowerCase())
