@@ -3,6 +3,7 @@ import Header from "../Components/Header";
 import { Link } from "react-router-dom";
 import NoteItem from "../Components/NoteItem";
 import { useEffect, useState } from "react";
+import { BASE_URL } from "../config/envConfig";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -11,7 +12,7 @@ const Home = () => {
 
   const getNotes = async () => {
     // get notes
-    const result = await fetch(`http://localhost:3000/api/notes`, {
+    const result = await fetch(`${BASE_URL}/api/notes`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

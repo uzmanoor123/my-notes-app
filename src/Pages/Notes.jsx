@@ -2,6 +2,7 @@ import NotesNavbar from "../Components/NotesNavbar";
 import Header from "../Components/Header";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { BASE_URL } from './../config/envConfig';
 const Notes = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -10,7 +11,7 @@ const Notes = () => {
   const isEditMode = Boolean(id);
   useEffect(() => {
     if(id){
-      fetch(`http://localhost:3000/api/notes/${id}`)
+      fetch(`${BASE_URL}/api/notes/${id}`)
         .then(res=>res.json())
         .then(data=>{
           setTitle(data.title);
@@ -30,7 +31,7 @@ const Notes = () => {
       id: crypto.randomUUID()
     };
     console.log(note);
-    await fetch("http://localhost:3000/api/notes",{
+    await fetch(`${BASE_URL}/api/notes`,{
       method:"POST",
       headers:{
         "Content-Type": "application/json",
@@ -45,7 +46,7 @@ const Notes = () => {
       title: title,
       description: description,
     }
-    await fetch(`http://localhost:3000/api/notes/${id}`,{
+    await fetch(`${BASE_URL}/api/notes/${id}`,{
       method:"PUT",
       headers:{
         "Content-Type": "application/json",
@@ -55,7 +56,7 @@ const Notes = () => {
     navigate("/");
   };
   const HandleDeleteNote = async () => {
-      await fetch(`http://localhost:3000/api/notes/${id}`,{
+      await fetch(`${BASE_URL}/api/notes/${id}`,{
       method:"DELETE",
       headers:{
         "Content-Type": "application/json",
