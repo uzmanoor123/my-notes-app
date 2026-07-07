@@ -8,16 +8,18 @@ const Notes = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditMode = Boolean(id);
-  const [notes, setNotes] = useState([]);
-  const currentNote = notes.find((note) => note.id == id);
   useEffect(() => {
-    if (currentNote) {
-      setTitle(currentNote.title);
-      setDescription(currentNote.description);
+    if(id){
+      fetch(`http://localhost:3000/api/notes/${id}`)
+        .then(res=>res.json())
+        .then(data=>{
+          setTitle(data.title);
+          setDescription(data.description)
+        })
     }
-  }, [currentNote]);
+}, [id]);
 
-  const handleAddNotes = (event) => {
+  const handleAddNotes = async (event) => {
     event.preventDefault();
 
     let note = {
@@ -28,23 +30,22 @@ const Notes = () => {
       id: crypto.randomUUID()
     };
     console.log(note);
-    fetch("http://localhost:3000/api/notes",{
+    await fetch("http://localhost:3000/api/notes",{
       method:"POST",
       headers:{
         "Content-Type": "application/json",
       },
       body:JSON.stringify(note)
-      
     })
     navigate("/");
   };
 
-  const handleUpdatedNote = () => {
+  const handleUpdatedNote =async () => {
     const updatedNote = {
       title: title,
       description: description,
     }
-    fetch(`http://localhost:3000/api/notes/${id}`,{
+    await fetch(`http://localhost:3000/api/notes/${id}`,{
       method:"PUT",
       headers:{
         "Content-Type": "application/json",
@@ -53,8 +54,8 @@ const Notes = () => {
     })  
     navigate("/");
   };
-  const HandleDeleteNote = () => {
-      fetch(`http://localhost:3000/api/notes/${id}`,{
+  const HandleDeleteNote = async () => {
+      await fetch(`http://localhost:3000/api/notes/${id}`,{
       method:"DELETE",
       headers:{
         "Content-Type": "application/json",
