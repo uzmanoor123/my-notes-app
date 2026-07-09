@@ -55,8 +55,8 @@ const Home = () => {
       >
         {sortedNotes.map((note) => (
           <NoteItem
-            key={note.id}
-            id={note.id}
+            key={note._id}
+            id={note._id}
             title={note.title}
             description={note.description}
             date={new Date(note.updatedAt ?? note.createdAt).toLocaleString()}
