@@ -1,5 +1,4 @@
 const HomeNavbar = ({setSearch,setSortBy}) => {
-  
   return (
     <nav className="text-[18px] bg-[#F7F7F7] py-4 text-black mb-4  flex justify-center gap-8">
       <div>

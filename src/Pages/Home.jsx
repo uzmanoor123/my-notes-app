@@ -11,12 +11,16 @@ const Home = () => {
   const [notes, setNotes] = useState([]);
 
   const getNotes = async () => {
+       const token = localStorage.getItem("token")
+       console.log(token)
     // get notes
     const result = await fetch(`${BASE_URL}/api/notes`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        authorization: token
       },
+         
     });
 
     const response = await result.json();

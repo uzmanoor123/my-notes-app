@@ -10,8 +10,16 @@ const Notes = () => {
   const { id } = useParams();
   const isEditMode = Boolean(id);
   useEffect(() => {
+    const token = localStorage.getItem("token")
     if(id){
-      fetch(`${BASE_URL}/api/notes/${id}`)
+      fetch(`${BASE_URL}/api/notes/${id}`,{
+        headers:{
+          "Content-Type": "application/json",
+          authorization: token
+        }
+      },
+
+      )
         .then(res=>res.json())
         .then(data=>{
           setTitle(data.title);
@@ -22,19 +30,19 @@ const Notes = () => {
 
   const handleAddNotes = async (event) => {
     event.preventDefault();
-
+    const token = localStorage.getItem("token")
     let note = {
       title: title,
       description: description,
       createdAt: Date.now(),
-      updatedAt: null,
-      id: crypto.randomUUID()
+      updatedAt: null
     };
     console.log(note);
     await fetch(`${BASE_URL}/api/notes`,{
       method:"POST",
       headers:{
         "Content-Type": "application/json",
+        authorization: token
       },
       body:JSON.stringify(note)
     })
@@ -42,6 +50,7 @@ const Notes = () => {
   };
 
   const handleUpdatedNote =async () => {
+    const token = localStorage.getItem("token")
     const updatedNote = {
       title: title,
       description: description,
@@ -50,18 +59,20 @@ const Notes = () => {
       method:"PUT",
       headers:{
         "Content-Type": "application/json",
+        authorization: token
       },
       body:JSON.stringify(updatedNote)  
     })  
     navigate("/");
   };
   const HandleDeleteNote = async () => {
+    const token = localStorage.getItem("token")
       await fetch(`${BASE_URL}/api/notes/${id}`,{
       method:"DELETE",
       headers:{
         "Content-Type": "application/json",
-      },
-      body:JSON.stringify(HandleDeleteNote)  
+        authorization: token
+      }, 
     })   
     navigate("/");
   };
