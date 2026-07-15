@@ -1,6 +1,6 @@
 import HomeNavbar from "../Components/HomeNavbar";
 import Header from "../Components/Header";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import NoteItem from "../Components/NoteItem";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../config/envConfig";
@@ -9,6 +9,7 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [notes, setNotes] = useState([]);
+  const navigate = useNavigate();
 
   const getNotes = async () => {
        const token = localStorage.getItem("token")
@@ -24,7 +25,15 @@ const Home = () => {
     });
 
     const response = await result.json();
-    console.log(response);
+    if(!result.ok){
+      if(response.error === "invalid or expire token" ||
+      response.error === "token is required"){
+      localStorage.removeItem("token");
+      navigate("/login");
+      return       
+      }
+      }
+    
     setNotes(response);
   };
 
@@ -42,9 +51,9 @@ const Home = () => {
     if (sortBy == "alphabets") {
       return a.title.localeCompare(b.title);
     } else if (sortBy == "edited") {
-      return b.updatedAt - a.updatedAt;
+      return new Date(b.updatedAt) - new Date(a.updatedAt);
     } else if (sortBy == "created") {
-      return b.createdAt - a.createdAt;
+      return new Date(b.createdAt) - new Date (a.createdAt);
     }
     return 0;
   });

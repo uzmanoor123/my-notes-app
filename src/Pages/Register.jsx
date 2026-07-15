@@ -33,7 +33,7 @@ const Register = () => {
     }
   }
 catch(error){
-    console.log(error)
+    console.log(error);
 }
   };
   return (
@@ -48,8 +48,7 @@ catch(error){
             placeholder="Enter your full name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
-            
+            required       
           />
         </div>
         <div className="mb-4  mt-4">
