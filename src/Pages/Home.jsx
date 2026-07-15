@@ -10,10 +10,10 @@ const Home = () => {
   const [sortBy, setSortBy] = useState("");
   const [notes, setNotes] = useState([]);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token")
+
 
   const getNotes = async () => {
-       const token = localStorage.getItem("token")
-       console.log(token)
     // get notes
     const result = await fetch(`${BASE_URL}/api/notes`, {
       method: "GET",
@@ -40,6 +40,12 @@ const Home = () => {
   useEffect(() => {
     getNotes();
   }, []);
+
+  useEffect(() => {
+    if(!token) {
+      navigate("/login");
+    }
+  }, [token])
 
   const filteredNotes = notes.filter((note) => {
     return (
