@@ -10,7 +10,7 @@ const Home = () => {
   const [sortBy, setSortBy] = useState("");
   const [notes, setNotes] = useState([]);
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token")
 
   const getNotes = async () => {
     // get notes
@@ -18,19 +18,18 @@ const Home = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: token,
+        authorization: token
       },
+
     });
 
     const response = await result.json();
     if (!result.ok) {
-      if (
-        response.error === "invalid or expire token" ||
-        response.error === "token is required"
-      ) {
+      if (response.error === "invalid or expire token" ||
+        response.error === "token is required") {
         localStorage.removeItem("token");
         navigate("/login");
-        return;
+        return
       }
     }
 
@@ -45,7 +44,7 @@ const Home = () => {
     if (!token) {
       navigate("/login");
     }
-  }, [token]);
+  }, [token])
 
   const filteredNotes = notes.filter((note) => {
     return (

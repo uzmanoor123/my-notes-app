@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-
+import {FaSignOutAlt}from "react-icons/fa";
 const HomeNavbar = ({ setSearch, setSortBy }) => {
   const navigate = useNavigate();
   const handleLogout = (e) => {
@@ -9,7 +9,7 @@ const HomeNavbar = ({ setSearch, setSortBy }) => {
   };
 
   return (
-    <nav className="text-[18px] bg-[#F7F7F7] py-4 text-black mb-4  flex  justify-center gap-8 relative">
+    <nav className="text-[18px] bg-[#F7F7F7] px-10 py-4 text-black mb-4  flex items-center justify-center gap-8 relative">
       <div className="justify-center">
         <input
           type="text"
@@ -32,12 +32,13 @@ const HomeNavbar = ({ setSearch, setSortBy }) => {
           <option value="created">Recently Created</option>
         </select>
       </div>
-      <div className="flex">
+      <div >
         <button
           onClick={handleLogout}
-          className="bg-[#437993]  p-2.5 rounded-lg hover:cursor-pointer  text-white fixed right-10 "
+          className="bg-[#437993] hover:bg-[#35657a] text-white px-5 py-2.5 rounded-lg shadow-md transition-all duration-300 flex items-center cursor-pointer gap-3 fixed top-28 right-15"
         >
-          LogoutOut
+          <FaSignOutAlt/>
+          SignOut
         </button>
       </div>
     </nav>

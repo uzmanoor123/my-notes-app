@@ -9,9 +9,14 @@ const Notes = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditMode = Boolean(id);
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (id) {
+      const timer = setTimeout(() => {
+        setLoading(true);
+      }, 500);
       fetch(`${BASE_URL}/api/notes/${id}`, {
         headers: {
           "Content-Type": "application/json",
@@ -20,6 +25,8 @@ const Notes = () => {
       })
         .then((res) => res.json())
         .then((data) => {
+          clearTimeout(timer);
+          setLoading(false);
           setTitle(data.title);
           setDescription(data.description);
         });
@@ -28,6 +35,9 @@ const Notes = () => {
 
   const handleAddNotes = async (event) => {
     event.preventDefault();
+    const timer = setTimeout(() => {
+      setLoading(true);
+    }, 500);
     const token = localStorage.getItem("token");
     let note = {
       title: title,
@@ -44,10 +54,15 @@ const Notes = () => {
       },
       body: JSON.stringify(note),
     });
+    setLoading(false);
+    clearTimeout(timer);
     navigate("/");
   };
 
   const handleUpdatedNote = async () => {
+    const timer = setTimeout(() => {
+      setLoading(true);
+    }, 500);
     const token = localStorage.getItem("token");
     const updatedNote = {
       title: title,
@@ -61,9 +76,14 @@ const Notes = () => {
       },
       body: JSON.stringify(updatedNote),
     });
+    setLoading(false);
+    clearTimeout(timer);
     navigate("/");
   };
   const HandleDeleteNote = async () => {
+    const timer = setTimeout(() => {
+      setLoading(true);
+    }, 500);      
     const token = localStorage.getItem("token");
     await fetch(`${BASE_URL}/api/notes/${id}`, {
       method: "DELETE",
@@ -72,6 +92,8 @@ const Notes = () => {
         authorization: token,
       },
     });
+    setLoading(false);
+    clearTimeout(timer);
     navigate("/");
   };
 
@@ -125,7 +147,7 @@ const Notes = () => {
               {isEditMode && (
                 <button
                   type="button"
-                  onClick={HandleDeleteNote}
+                  onClick={() => setShowModal(true)}
                   className="bg-[#437993] p-3 rounded-lg hover:cursor-pointer mt-3 text-white "
                 >
                   Remove Note
@@ -135,6 +157,32 @@ const Notes = () => {
           </form>
         </main>
       </div>
+      {showModal && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg w-96">
+            <h2 className="text-xl font-bold">Delete Note</h2>
+
+            <p className="mt-3">Are you sure you want to delete this note?</p>
+            <div className="flex justify-end gap-4 mt-5">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-5 py-2 bg-gray-300 rounded" >
+                No
+              </button>
+              <button  onClick={HandleDeleteNote} className="px-5 py-2 bg-red-500 text-white rounded">
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {loading && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg">
+            <p className="text-lg font-bold">Loading...</p>
+          </div>
+        </div>
+      )}
     </>
   );
 };
