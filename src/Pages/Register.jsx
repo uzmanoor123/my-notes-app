@@ -1,40 +1,38 @@
 import { useState } from "react";
 import { BASE_URL } from "./../config/envConfig";
-import {Link,useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Register = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
-    const response = await fetch(`${BASE_URL}/api/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-    });
-    const data = await response.json();
-    if (response.ok) {
-      setName("");
-      setEmail("");
-      setPassword("");
-      navigate("/login")
+    try {
+      const response = await fetch(`${BASE_URL}/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setName("");
+        setEmail("");
+        setPassword("");
+        navigate("/login");
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.log(error);
     }
-    else{
-        alert(data.error)
-    }
-  }
-catch(error){
-    console.log(error);
-}
   };
   return (
     <div className="min-h-screen bg-[#3498db] flex justify-center items-center">
@@ -48,7 +46,7 @@ catch(error){
             placeholder="Enter your full name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required       
+            required
           />
         </div>
         <div className="mb-4  mt-4">
@@ -80,7 +78,10 @@ catch(error){
           SignUp
         </button>
         <p className="text-center mt-2">
-          Already have an account?  <Link to="/login" className="text-blue-400" >Login</Link>
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-400">
+            Login
+          </Link>
         </p>
       </form>
     </div>

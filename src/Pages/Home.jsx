@@ -1,6 +1,6 @@
 import HomeNavbar from "../Components/HomeNavbar";
 import Header from "../Components/Header";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NoteItem from "../Components/NoteItem";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../config/envConfig";
@@ -10,8 +10,7 @@ const Home = () => {
   const [sortBy, setSortBy] = useState("");
   const [notes, setNotes] = useState([]);
   const navigate = useNavigate();
-  const token = localStorage.getItem("token")
-
+  const token = localStorage.getItem("token");
 
   const getNotes = async () => {
     // get notes
@@ -19,21 +18,22 @@ const Home = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: token
+        authorization: token,
       },
-         
     });
 
     const response = await result.json();
-    if(!result.ok){
-      if(response.error === "invalid or expire token" ||
-      response.error === "token is required"){
-      localStorage.removeItem("token");
-      navigate("/login");
-      return       
+    if (!result.ok) {
+      if (
+        response.error === "invalid or expire token" ||
+        response.error === "token is required"
+      ) {
+        localStorage.removeItem("token");
+        navigate("/login");
+        return;
       }
-      }
-    
+    }
+
     setNotes(response);
   };
 
@@ -42,10 +42,10 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if(!token) {
+    if (!token) {
       navigate("/login");
     }
-  }, [token])
+  }, [token]);
 
   const filteredNotes = notes.filter((note) => {
     return (
@@ -59,7 +59,7 @@ const Home = () => {
     } else if (sortBy == "edited") {
       return new Date(b.updatedAt) - new Date(a.updatedAt);
     } else if (sortBy == "created") {
-      return new Date(b.createdAt) - new Date (a.createdAt);
+      return new Date(b.createdAt) - new Date(a.createdAt);
     }
     return 0;
   });

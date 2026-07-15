@@ -1,40 +1,38 @@
 import { useState } from "react";
 import { BASE_URL } from "../config/envConfig";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
-  const navigate = useNavigate()
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const handleSubmit = async(e)=>{
-        e.preventDefault();
-            try{
-            const response = await fetch(`${BASE_URL}/api/auth/login`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                email,
-                password,
-              }),
-            });
-            const data = await response.json();
-            if (response.ok) {
-              localStorage.setItem("token", data.token)
-             navigate("/")
-            }
-            else{
-                alert(data.error)
-            }
-          }
-        catch(error){
-            console.log(error)
-            alert("something went wrong")
-        }
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${BASE_URL}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        navigate("/");
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.log(error);
+      alert("something went wrong");
     }
+  };
 
-    return ( 
-         <div className="min-h-screen bg-[#3498db] flex justify-center items-center">
+  return (
+    <div className="min-h-screen bg-[#3498db] flex justify-center items-center">
       <form onSubmit={handleSubmit} className="bg-white p-10 rounded w-80">
         <h2 className="text-2xl font-bold text-center">Login</h2>
         <div className="mb-4  mt-4">
@@ -66,11 +64,14 @@ const Login = () => {
           Login
         </button>
         <p className="text-center mt-2">
-          Don't have an account?  <Link to="/register" className="text-blue-400">Register</Link>
+          Don't have an account?{" "}
+          <Link to="/register" className="text-blue-400">
+            Register
+          </Link>
         </p>
       </form>
     </div>
-     );
-}
- 
+  );
+};
+
 export default Login;

@@ -2,7 +2,7 @@ import NotesNavbar from "../Components/NotesNavbar";
 import Header from "../Components/Header";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { BASE_URL } from './../config/envConfig';
+import { BASE_URL } from "./../config/envConfig";
 const Notes = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -10,70 +10,68 @@ const Notes = () => {
   const { id } = useParams();
   const isEditMode = Boolean(id);
   useEffect(() => {
-    const token = localStorage.getItem("token")
-    if(id){
-      fetch(`${BASE_URL}/api/notes/${id}`,{
-        headers:{
+    const token = localStorage.getItem("token");
+    if (id) {
+      fetch(`${BASE_URL}/api/notes/${id}`, {
+        headers: {
           "Content-Type": "application/json",
-          authorization: token
-        }
-      },
-
-      )
-        .then(res=>res.json())
-        .then(data=>{
+          authorization: token,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
           setTitle(data.title);
-          setDescription(data.description)
-        })
+          setDescription(data.description);
+        });
     }
-}, [id]);
+  }, [id]);
 
   const handleAddNotes = async (event) => {
     event.preventDefault();
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
     let note = {
       title: title,
       description: description,
       createdAt: Date.now(),
-      updatedAt: null
+      updatedAt: null,
     };
     console.log(note);
-    await fetch(`${BASE_URL}/api/notes`,{
-      method:"POST",
-      headers:{
+    await fetch(`${BASE_URL}/api/notes`, {
+      method: "POST",
+      headers: {
         "Content-Type": "application/json",
-        authorization: token
+        authorization: token,
       },
-      body:JSON.stringify(note)
-    })
+      body: JSON.stringify(note),
+    });
     navigate("/");
   };
 
-  const handleUpdatedNote =async () => {
-    const token = localStorage.getItem("token")
+  const handleUpdatedNote = async () => {
+    const token = localStorage.getItem("token");
     const updatedNote = {
       title: title,
       description: description,
-    }
-    await fetch(`${BASE_URL}/api/notes/${id}`,{
-      method:"PUT",
-      headers:{
+    };
+    await fetch(`${BASE_URL}/api/notes/${id}`, {
+      method: "PUT",
+      headers: {
         "Content-Type": "application/json",
-        authorization: token
+        authorization: token,
       },
-      body:JSON.stringify(updatedNote)  
-    })  
+      body: JSON.stringify(updatedNote),
+    });
     navigate("/");
   };
   const HandleDeleteNote = async () => {
-    const token = localStorage.getItem("token")
-      await fetch(`${BASE_URL}/api/notes/${id}`,{
-      method:"DELETE",
-      headers:{
+    const token = localStorage.getItem("token");
+    await fetch(`${BASE_URL}/api/notes/${id}`, {
+      method: "DELETE",
+      headers: {
         "Content-Type": "application/json",
-        authorization: token
-      }, 
-    })   
+        authorization: token,
+      },
+    });
     navigate("/");
   };
 
