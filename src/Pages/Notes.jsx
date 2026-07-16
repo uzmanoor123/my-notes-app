@@ -1,19 +1,22 @@
-import NotesNavbar from "../Components/NotesNavbar";
+import Navbar from "../Components/Navbar";
 import Header from "../Components/Header";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { BASE_URL } from "./../config/envConfig";
+import { useAuth } from "../hooks/useAuth";
+import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 const Notes = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
+  const { token } = useAuth({ required: true });
   const { id } = useParams();
   const isEditMode = Boolean(id);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (id) {
+    if (id && token) {
       const timer = setTimeout(() => {
         setLoading(true);
       }, 500);
@@ -31,14 +34,13 @@ const Notes = () => {
           setDescription(data.description);
         });
     }
-  }, [id]);
+  }, [id, token]);
 
   const handleAddNotes = async (event) => {
     event.preventDefault();
     const timer = setTimeout(() => {
       setLoading(true);
     }, 500);
-    const token = localStorage.getItem("token");
     let note = {
       title: title,
       description: description,
@@ -63,7 +65,6 @@ const Notes = () => {
     const timer = setTimeout(() => {
       setLoading(true);
     }, 500);
-    const token = localStorage.getItem("token");
     const updatedNote = {
       title: title,
       description: description,
@@ -80,11 +81,11 @@ const Notes = () => {
     clearTimeout(timer);
     navigate("/");
   };
+
   const HandleDeleteNote = async () => {
     const timer = setTimeout(() => {
       setLoading(true);
-    }, 500);      
-    const token = localStorage.getItem("token");
+    }, 500);
     await fetch(`${BASE_URL}/api/notes/${id}`, {
       method: "DELETE",
       headers: {
@@ -100,7 +101,7 @@ const Notes = () => {
   return (
     <>
       <Header />
-      <NotesNavbar />
+      <Navbar />
       <div className="flex  flex-col gap-3 mx-auto max-w-175">
         <main className="gap-3 flex flex-col">
           <form onSubmit={handleAddNotes}>
@@ -132,7 +133,7 @@ const Notes = () => {
                   type="submit"
                   className="bg-[#437993] p-3 rounded-lg hover:cursor-pointer mt-3 text-white"
                 >
-                  Add Note
+                  <FaPlus className="text-white inline-block"/> Add Note
                 </button>
               )}
               {isEditMode && (
@@ -141,7 +142,7 @@ const Notes = () => {
                   onClick={handleUpdatedNote}
                   className="bg-[#437993] p-3 rounded-lg hover:cursor-pointer mt-3 text-white"
                 >
-                  Update Note
+                  <FaEdit className="text-white inline-block"/> Update Note
                 </button>
               )}
               {isEditMode && (
@@ -150,7 +151,7 @@ const Notes = () => {
                   onClick={() => setShowModal(true)}
                   className="bg-[#437993] p-3 rounded-lg hover:cursor-pointer mt-3 text-white "
                 >
-                  Remove Note
+                  <FaTrash className="text-white inline-block"/> Remove Note
                 </button>
               )}
             </div>

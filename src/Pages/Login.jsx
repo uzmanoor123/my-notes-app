@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { BASE_URL } from "../config/envConfig";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -20,7 +24,7 @@ const Login = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("token", data.token);
+        login(data.token);
         navigate("/");
       } else {
         alert(data.error);
@@ -32,7 +36,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#3498db] flex justify-center items-center">
+    <div className="min-h-screen bg-[#437993] flex justify-center items-center">
       <form onSubmit={handleSubmit} className="bg-white p-10 rounded w-80">
         <h2 className="text-2xl font-bold text-center">Login</h2>
         <div className="mb-4  mt-4">
@@ -59,13 +63,13 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className="bg-sky-500 w-full text-white p-2 rounded mt-3 hover:bg-sky-600 cursor-pointer"
+          className="bg-[#437993] w-full text-white p-2 rounded mt-3 hover:bg-[#35657a] cursor-pointer"
         >
           Login
         </button>
         <p className="text-center mt-2">
           Don't have an account?{" "}
-          <Link to="/register" className="text-blue-400">
+          <Link to="/register" className="text-[#437993]">
             Register
           </Link>
         </p>
